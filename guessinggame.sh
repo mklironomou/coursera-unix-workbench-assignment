@@ -8,20 +8,25 @@ function get_directory_file_counts {
 
 echo "Type in your guess about the number of files in the current directory ..."
 echo  "... and then press Enter:"
-read response
 
 real_file_counts=$(get_directory_file_counts)
 
-while [[ $response -ne $real_file_counts ]]
+while read response
 do
-  if [[ $response -gt $real_file_counts ]]
+  if ! [[ $response =~ ^[0-9]+$ ]]
+  then
+    echo "Your response is not an integer non-negative number ..."
+    echo "Type in a new (valid) guess and then press Enter:"
+  elif [[ $response -gt $real_file_counts ]]
   then
     echo "Your response is greater than expected ..."
-  else
+    echo "Type in a new guess and then press Enter:"
+  elif [[ $response -lt $real_file_counts ]]
+  then
     echo "Your response is lower than expected ..."
+    echo "Type in a new guess and then press Enter:"
+  else
+    echo "Congratulations, $real_file_counts is the correct number!"
+    break
   fi
-  echo  "Type in a new guess and then press Enter:"
-  read response
 done
-
-echo "Congratulations, $real_file_counts is the correct number!"
